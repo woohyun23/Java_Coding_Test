@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Section03 Problem03 - Memory Limit 원인</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #1d1d1f;
+      background: #f5f5f7;
+      line-height: 1.55;
+    }
+
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 32px;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      margin: 0 0 24px;
+      color: #56565c;
+      font-size: 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    section {
+      background: #fff;
+      border: 1px solid #dedee3;
+      border-radius: 8px;
+      padding: 18px;
+    }
+
+    section.full {
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 20px;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    li + li {
+      margin-top: 8px;
+    }
+
+    code {
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: #ededf0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.94em;
+    }
+
+    pre {
+      margin: 0;
+      padding: 14px;
+      overflow-x: auto;
+      border-radius: 8px;
+      background: #1f2328;
+      color: #f6f8fa;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    pre code {
+      padding: 0;
+      background: transparent;
+      color: inherit;
+    }
+
+    .bad {
+      border-left: 5px solid #d1242f;
+    }
+
+    .good {
+      border-left: 5px solid #1a7f37;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .step {
+      min-height: 86px;
+      padding: 12px;
+      border: 1px solid #d0d7de;
+      border-radius: 8px;
+      background: #fbfbfd;
+    }
+
+    .step strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .step span {
+      display: block;
+      color: #56565c;
+      font-size: 14px;
+    }
+
+    .formula {
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 8px;
+      background: #edf7ed;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    @media (max-width: 760px) {
+      main {
+        padding: 24px 14px 36px;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+
+      .grid,
+      .flow {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Memory Limit Exceeded 원인과 해결</h1>
+    <p class="subtitle">Inflearn Section03 Problem03: 최대 매출 문제는 부분 배열을 저장하지 말고, 합만 이동시켜야 한다.</p>
+
+    <div class="grid">
+      <section class="bad">
+        <h2>현재 코드의 문제</h2>
+        <ul>
+          <li>반복문마다 <code>new int[m]</code>으로 임시 배열을 새로 만든다.</li>
+          <li>각 시작 위치마다 <code>m</code>개를 다시 복사해서 <code>O(n * m)</code>이 된다.</li>
+          <li>합도 <code>temp[0] + temp[1] + temp[2]</code>처럼 3개로 고정되어 있어 <code>m</code>이 바뀌면 틀린다.</li>
+        </ul>
+      </section>
+
+      <section class="good">
+        <h2>해결 핵심</h2>
+        <ul>
+          <li>임시 배열 <code>temp</code>는 필요 없다.</li>
+          <li>처음 <code>m</code>개의 합을 구한다.</li>
+          <li>창을 한 칸 옮길 때 새 값은 더하고, 빠지는 값은 뺀다.</li>
+          <li>매번 <code>max</code>만 갱신한다.</li>
+        </ul>
+      </section>
+    </div>
+
+    <section class="full">
+      <h2>슬라이딩 윈도우 흐름</h2>
+      <div class="flow">
+        <div class="step">
+          <strong>1. 첫 구간</strong>
+          <span><code>arr[0]</code>부터 <code>arr[m - 1]</code>까지 더한다.</span>
+        </div>
+        <div class="step">
+          <strong>2. max 초기화</strong>
+          <span>첫 구간의 합을 현재 최대값으로 둔다.</span>
+        </div>
+        <div class="step">
+          <strong>3. 한 칸 이동</strong>
+          <span>오른쪽 새 값은 더하고 왼쪽 이전 값은 뺀다.</span>
+        </div>
+        <div class="step">
+          <strong>4. 반복</strong>
+          <span>끝까지 이동하면서 <code>max</code>를 갱신한다.</span>
+        </div>
+      </div>
+      <div class="formula">다음 합 = 이전 합 - 빠지는 값 + 새로 들어오는 값</div>
+    </section>
+
+    <section class="full">
+      <h2>예시</h2>
+      <pre><code>m = 3
+배열: 12 15 11 20 25
+
+첫 합: 12 + 15 + 11 = 38
+다음 합: 38 - 12 + 20 = 46
+다음 합: 46 - 15 + 25 = 56</code></pre>
+    </section>
+
+    <section class="full">
+      <h2>수정할 때 생각할 코드 구조</h2>
+      <pre><code>int sum = 0;
+
+처음 m개를 sum에 더한다.
+int max = sum;
+
+for (int i = m; i &lt; n; i++) {
+    sum = sum + arr[i] - arr[i - m];
+    max = Math.max(max, sum);
+}</code></pre>
+    </section>
+  </main>
+</body>
+</html>
