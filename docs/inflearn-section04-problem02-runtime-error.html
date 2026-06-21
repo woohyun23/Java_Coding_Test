@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Section04 Problem02 - Runtime Error 원인</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #1d1d1f;
+      background: #f5f5f7;
+      line-height: 1.55;
+    }
+
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 32px;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      margin: 0 0 24px;
+      color: #56565c;
+      font-size: 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    section {
+      background: #fff;
+      border: 1px solid #dedee3;
+      border-radius: 8px;
+      padding: 18px;
+    }
+
+    section.full {
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 20px;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    li + li {
+      margin-top: 8px;
+    }
+
+    code {
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: #ededf0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.94em;
+    }
+
+    pre {
+      margin: 0;
+      padding: 14px;
+      overflow-x: auto;
+      border-radius: 8px;
+      background: #1f2328;
+      color: #f6f8fa;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    pre code {
+      padding: 0;
+      background: transparent;
+      color: inherit;
+    }
+
+    .bad {
+      border-left: 5px solid #d1242f;
+    }
+
+    .good {
+      border-left: 5px solid #1a7f37;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .step {
+      min-height: 118px;
+      padding: 12px;
+      border: 1px solid #d0d7de;
+      border-radius: 8px;
+      background: #fbfbfd;
+    }
+
+    .step strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .step span {
+      display: block;
+      color: #56565c;
+      font-size: 14px;
+    }
+
+    .formula {
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 8px;
+      background: #edf7ed;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .error {
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 8px;
+      background: #fff1f1;
+      color: #86181d;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    @media (max-width: 760px) {
+      main {
+        padding: 24px 14px 36px;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+
+      .grid,
+      .flow {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Runtime Error 원인과 해결</h1>
+    <p class="subtitle">Inflearn Section04 Problem02: 아나그램 비교에서 <code>HashMap.get()</code> 결과가 <code>null</code>일 수 있다.</p>
+
+    <div class="grid">
+      <section class="bad">
+        <h2>현재 코드의 문제</h2>
+        <ul>
+          <li><code>s1</code>의 문자 개수를 <code>map</code>에 저장한다.</li>
+          <li><code>s2</code>를 돌면서 바로 <code>map.get(x) - 1</code>을 실행한다.</li>
+          <li>그런데 <code>s2</code>에 <code>s1</code>에 없는 문자가 나오면 <code>map.get(x)</code>는 <code>null</code>이다.</li>
+          <li><code>null - 1</code>을 계산하려 해서 <code>NullPointerException</code>이 발생한다.</li>
+        </ul>
+      </section>
+
+      <section class="good">
+        <h2>해결 핵심</h2>
+        <ul>
+          <li>빼기 전에 먼저 <code>map.containsKey(x)</code>를 검사한다.</li>
+          <li>없는 문자라면 바로 <code>NO</code>를 반환한다.</li>
+          <li>있는 문자라면 개수를 1 줄인다.</li>
+          <li>개수가 0이 되면 <code>map.remove(x)</code>로 지워도 된다.</li>
+        </ul>
+      </section>
+    </div>
+
+    <section class="full">
+      <h2>에러 재현 흐름</h2>
+      <div class="flow">
+        <div class="step">
+          <strong>1. 입력</strong>
+          <span><code>s1 = "abc"</code><br><code>s2 = "abd"</code></span>
+        </div>
+        <div class="step">
+          <strong>2. map 생성</strong>
+          <span><code>{a=1, b=1, c=1}</code><br><code>d</code>는 없다.</span>
+        </div>
+        <div class="step">
+          <strong>3. s2 순회</strong>
+          <span><code>a</code>, <code>b</code>는 처리된다.<br>다음 문자는 <code>d</code>다.</span>
+        </div>
+        <div class="step">
+          <strong>4. 런타임 에러</strong>
+          <span><code>map.get('d')</code>는 <code>null</code>.<br><code>null - 1</code>은 불가능하다.</span>
+        </div>
+      </div>
+      <div class="error">문제 지점: <code>map.put(x, map.get(x) - 1);</code></div>
+    </section>
+
+    <section class="full">
+      <h2>현재 코드에서 위험한 부분</h2>
+      <pre><code>for (char x : s2.toCharArray()) {
+    map.put(x, map.get(x) - 1);
+    if (map.get(x) == 0) map.remove(x);
+}</code></pre>
+    </section>
+
+    <section class="full">
+      <h2>안전한 검사 순서</h2>
+      <pre><code>for (char x : s2.toCharArray()) {
+    if (!map.containsKey(x)) {
+        return "NO";
+    }
+
+    map.put(x, map.get(x) - 1);
+
+    if (map.get(x) == 0) {
+        map.remove(x);
+    }
+}</code></pre>
+      <div class="formula">먼저 있는지 확인하고, 그 다음 개수를 줄인다.</div>
+    </section>
+
+    <section class="full">
+      <h2>최종 풀이 구조</h2>
+      <pre><code>public static String solution(String s1, String s2) {
+    HashMap&lt;Character, Integer&gt; map = new HashMap&lt;&gt;();
+
+    if (s1.length() != s2.length()) return "NO";
+
+    for (char x : s1.toCharArray()) {
+        map.put(x, map.getOrDefault(x, 0) + 1);
+    }
+
+    for (char x : s2.toCharArray()) {
+        if (!map.containsKey(x)) return "NO";
+
+        map.put(x, map.get(x) - 1);
+        if (map.get(x) == 0) map.remove(x);
+    }
+
+    return map.isEmpty() ? "YES" : "NO";
+}</code></pre>
+    </section>
+
+    <section class="full">
+      <h2>테스트 포인트</h2>
+      <pre><code>입력:
+AbaAeCe
+baeeACA
+
+출력:
+YES
+
+입력:
+abc
+abd
+
+출력:
+NO</code></pre>
+    </section>
+  </main>
+</body>
+</html>
