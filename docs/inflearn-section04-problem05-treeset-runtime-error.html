@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Section04 Problem05 - TreeSet과 Runtime Error</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #1d1d1f;
+      background: #f5f5f7;
+      line-height: 1.55;
+    }
+
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 32px;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      margin: 0 0 24px;
+      color: #56565c;
+      font-size: 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    section {
+      background: #fff;
+      border: 1px solid #dedee3;
+      border-radius: 8px;
+      padding: 18px;
+    }
+
+    section.full {
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 20px;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    li + li {
+      margin-top: 8px;
+    }
+
+    code {
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: #ededf0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.94em;
+    }
+
+    pre {
+      margin: 0;
+      padding: 14px;
+      overflow-x: auto;
+      border-radius: 8px;
+      background: #1f2328;
+      color: #f6f8fa;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    pre code {
+      padding: 0;
+      background: transparent;
+      color: inherit;
+    }
+
+    .bad {
+      border-left: 5px solid #d1242f;
+    }
+
+    .good {
+      border-left: 5px solid #1a7f37;
+    }
+
+    .info {
+      border-left: 5px solid #0969da;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .step {
+      min-height: 116px;
+      padding: 12px;
+      border: 1px solid #d0d7de;
+      border-radius: 8px;
+      background: #fbfbfd;
+    }
+
+    .step strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .step span {
+      display: block;
+      color: #56565c;
+      font-size: 14px;
+    }
+
+    .formula {
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 8px;
+      background: #edf7ed;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .error {
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 8px;
+      background: #fff1f1;
+      color: #86181d;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      border: 1px solid #d0d7de;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f6f8fa;
+    }
+
+    @media (max-width: 760px) {
+      main {
+        padding: 24px 14px 36px;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+
+      .grid,
+      .flow {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>K번째 큰 수 풀이 정리</h1>
+    <p class="subtitle">Inflearn Section04 Problem05: 배열 인덱스로 직접 접근하면 런타임 에러가 날 수 있고, 중복 합을 제거해야 한다.</p>
+
+    <div class="grid">
+      <section class="bad">
+        <h2>기존 코드의 문제</h2>
+        <ul>
+          <li>모든 3장 합을 <code>int[] tot</code>에 저장한다.</li>
+          <li><code>Arrays.sort(tot)</code> 후 <code>tot[t - m]</code>으로 K번째 큰 값을 꺼낸다.</li>
+          <li><code>m</code>이 가능한 합 개수보다 크면 <code>t - m</code>이 음수가 된다.</li>
+          <li>같은 합이 여러 번 나오면 중복된 값도 각각 다른 순위로 센다.</li>
+        </ul>
+      </section>
+
+      <section class="good">
+        <h2>해결 핵심</h2>
+        <ul>
+          <li><code>TreeSet</code>에 3장 합을 넣는다.</li>
+          <li><code>Set</code>이므로 같은 합은 자동으로 한 번만 저장된다.</li>
+          <li><code>Collections.reverseOrder()</code>로 큰 값부터 정렬한다.</li>
+          <li>앞에서부터 세다가 <code>m</code>번째 값을 만나면 반환한다.</li>
+        </ul>
+      </section>
+    </div>
+
+    <section class="full">
+      <h2>런타임 에러 흐름</h2>
+      <div class="flow">
+        <div class="step">
+          <strong>1. 입력</strong>
+          <span><code>n = 3</code>, <code>m = 50</code><br>카드는 <code>1 2 3</code></span>
+        </div>
+        <div class="step">
+          <strong>2. 조합 개수</strong>
+          <span>3장을 뽑는 방법은 1개뿐이다.<br><code>t = 1</code></span>
+        </div>
+        <div class="step">
+          <strong>3. 인덱스 계산</strong>
+          <span><code>t - m</code><br><code>1 - 50 = -49</code></span>
+        </div>
+        <div class="step">
+          <strong>4. 배열 접근</strong>
+          <span><code>tot[-49]</code> 접근 시도.<br>음수 인덱스라서 런타임 에러.</span>
+        </div>
+      </div>
+      <div class="error">문제 지점: <code>int res = tot[t - m];</code></div>
+    </section>
+
+    <section class="full">
+      <h2>중복 때문에 틀리는 예시</h2>
+      <pre><code>입력:
+5 3
+10 10 10 9 8
+
+조합별 합을 그대로 나열하면:
+30, 29, 29, 29, 28, 28, 28, 27, ...
+
+중복 제거 후 순위:
+1등: 30
+2등: 29
+3등: 28
+4등: 27
+
+정답은 28이다.</code></pre>
+      <div class="formula">이 문제의 순위는 같은 합을 여러 번 세지 않는 기준으로 봐야 한다.</div>
+    </section>
+
+    <section class="full info">
+      <h2>TreeSet이란?</h2>
+      <ul>
+        <li><code>TreeSet</code>은 <code>Set</code> 계열 자료구조라서 중복 값을 저장하지 않는다.</li>
+        <li>값을 넣을 때 자동으로 정렬된 상태를 유지한다.</li>
+        <li>기본 정렬은 오름차순이다. 예를 들어 <code>1, 5, 3</code>을 넣으면 순회 시 <code>1, 3, 5</code>가 나온다.</li>
+        <li><code>new TreeSet&lt;&gt;(Collections.reverseOrder())</code>를 쓰면 내림차순이 된다.</li>
+      </ul>
+    </section>
+
+    <section class="full">
+      <h2>배열과 TreeSet 비교</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>방식</th>
+            <th>특징</th>
+            <th>이 문제에서의 문제점 또는 장점</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>int[]</code> + <code>Arrays.sort</code></td>
+            <td>모든 값을 그대로 저장한 뒤 정렬한다.</td>
+            <td>중복 합이 제거되지 않는다. <code>tot[t - m]</code> 접근 시 인덱스 에러가 날 수 있다.</td>
+          </tr>
+          <tr>
+            <td><code>TreeSet</code></td>
+            <td>중복을 제거하고 정렬 상태를 유지한다.</td>
+            <td>K번째로 큰 서로 다른 합을 앞에서부터 안전하게 셀 수 있다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="full">
+      <h2>TreeSet 사용 흐름</h2>
+      <div class="flow">
+        <div class="step">
+          <strong>1. Set 생성</strong>
+          <span><code>TreeSet&lt;Integer&gt; set</code>을 내림차순으로 만든다.</span>
+        </div>
+        <div class="step">
+          <strong>2. 세 장 선택</strong>
+          <span><code>i</code>, <code>j</code>, <code>k</code> 반복문으로 모든 조합을 만든다.</span>
+        </div>
+        <div class="step">
+          <strong>3. 합 저장</strong>
+          <span><code>set.add(sum)</code>을 호출한다. 중복 합은 자동으로 무시된다.</span>
+        </div>
+        <div class="step">
+          <strong>4. K번째 찾기</strong>
+          <span>큰 값부터 순회하면서 <code>m</code>번째 값을 반환한다.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="full">
+      <h2>최종 코드 구조</h2>
+      <pre><code>public static int solution(int n, int m, int[] arr) {
+    TreeSet&lt;Integer&gt; set = new TreeSet&lt;&gt;(Collections.reverseOrder());
+
+    for (int i = 0; i &lt; n; i++) {
+        for (int j = i + 1; j &lt; n; j++) {
+            for (int k = j + 1; k &lt; n; k++) {
+                set.add(arr[i] + arr[j] + arr[k]);
+            }
+        }
+    }
+
+    int cnt = 0;
+    for (int x : set) {
+        cnt++;
+        if (cnt == m) return x;
+    }
+
+    return -1;
+}</code></pre>
+    </section>
+
+    <section class="full">
+      <h2>기억할 포인트</h2>
+      <ul>
+        <li><code>HashSet</code>은 중복 제거는 되지만 정렬은 보장하지 않는다.</li>
+        <li><code>TreeSet</code>은 중복 제거와 정렬을 동시에 처리한다.</li>
+        <li>K번째 값을 찾아야 할 때는 배열 인덱스로 무리하게 접근하기보다, 실제로 존재하는 값만 순회하면서 세는 방식이 안전하다.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
