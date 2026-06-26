@@ -1,4 +1,4 @@
-package programmers.problem12919;
+package programmers.level1.problem12919;
 
 class Solution {
     public String solution(String[] seoul) {

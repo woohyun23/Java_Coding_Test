@@ -1,4 +1,4 @@
-package programmers.problem12912;
+package programmers.level1.problem12912;
 
 class Solution {
     public long solution(int a, int b) {

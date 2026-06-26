@@ -1,4 +1,4 @@
-package programmers.problem86051;
+package programmers.level1.problem86051;
 
 class Solution {
     public int solution(int[] numbers) {

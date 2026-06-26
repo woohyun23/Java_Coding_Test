@@ -1,4 +1,4 @@
-package programmers.problem12948;
+package programmers.level1.problem12948;
 
 class Solution {
     public String solution(String phone_number) {

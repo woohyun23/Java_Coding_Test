@@ -1,4 +1,4 @@
-package programmers.problem12912;
+package programmers.level1.problem12947;
 
 public class Main {
     public static void main(String[] args) {

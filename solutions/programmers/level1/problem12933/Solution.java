@@ -1,4 +1,4 @@
-package programmers.problem12933;
+package programmers.level1.problem12933;
 
 import java.util.Arrays;
 

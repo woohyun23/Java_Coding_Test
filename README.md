@@ -8,9 +8,11 @@ Java로 코딩 테스트 문제를 풀이하고 기록하는 저장소입니다.
 .
 ├── solutions/
 │   ├── inflearn/section01/problem01/Main.java
-│   └── programmers/problem12944/
-│       ├── Solution.java
-│       └── Main.java
+│   └── programmers/
+│       ├── level1/problem12944/
+│       │   ├── Solution.java
+│       │   └── Main.java
+│       └── level2/
 ├── templates/
 │   ├── inflearn/Main.java
 │   └── programmers/
@@ -42,8 +44,19 @@ Java로 코딩 테스트 문제를 풀이하고 기록하는 저장소입니다.
 프로그래머스:
 
 ```bash
-./scripts/new-programmers.sh 12944
+./scripts/new-programmers.sh <레벨> <문제번호>
 ```
+
+예시:
+
+```bash
+./scripts/new-programmers.sh 1 12944
+```
+
+위 명령은 `templates/programmers`의 Java 파일을 복사해
+`solutions/programmers/level1/problem12944/`를 만들고
+`package programmers.level1.problem12944;`를 자동으로 추가합니다. 레벨은 `1` 또는
+`level1`처럼 입력할 수 있습니다. 이미 같은 문제 폴더가 있으면 새로 만들지 않습니다.
 
 ## 실행하기
 
@@ -62,7 +75,7 @@ Java로 코딩 테스트 문제를 풀이하고 기록하는 저장소입니다.
 프로그래머스 문제는 제출용 `Solution.java`와 로컬 테스트용 `Main.java`를 함께 둡니다.
 
 ```bash
-./scripts/run.sh solutions/programmers/problem12944/Main.java
+./scripts/run.sh solutions/programmers/level1/problem12944/Main.java
 ```
 
 `run.sh`는 선택한 파일과 같은 디렉터리의 Java 파일을 함께 컴파일합니다. 컴파일 결과는

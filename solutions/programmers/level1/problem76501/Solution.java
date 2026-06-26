@@ -1,4 +1,4 @@
-package programmers.problem76501;
+package programmers.level1.problem76501;
 
 class Solution {
     public int solution(int[] absolutes, boolean[] signs) {

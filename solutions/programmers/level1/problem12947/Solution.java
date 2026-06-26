@@ -1,4 +1,4 @@
-package programmers.problem12947;
+package programmers.level1.problem12947;
 
 class Solution {
     public boolean solution(int input) {

@@ -1,4 +1,4 @@
-package programmers.problem12943;
+package programmers.level1.problem12943;
 
 class Solution {
     public int solution(int num) {
