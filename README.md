@@ -33,61 +33,19 @@ Java로 코딩 테스트 문제를 풀이하고 기록하는 저장소입니다.
 ## 새 문제 시작하기
 
 인프런:
-
-```bash
-./scripts/new-inflearn.sh 1 3
-```
-
-위 명령은 `solutions/inflearn/section01/problem03/Main.java`를 만들고
-`package inflearn.section01.problem03;`을 자동으로 추가합니다.
+./scripts/new-inflearn.sh <레벨> <문제번호>
 
 프로그래머스:
-
-```bash
 ./scripts/new-programmers.sh <레벨> <문제번호>
-```
 
-예시:
-
-```bash
+예시
 ./scripts/new-programmers.sh 1 12944
-```
+
 
 위 명령은 `templates/programmers`의 Java 파일을 복사해
 `solutions/programmers/level1/problem12944/`를 만들고
 `package programmers.level1.problem12944;`를 자동으로 추가합니다. 레벨은 `1` 또는
 `level1`처럼 입력할 수 있습니다. 이미 같은 문제 폴더가 있으면 새로 만들지 않습니다.
-
-## 실행하기
-
-인프런 문제:
-
-```bash
-./scripts/run.sh solutions/inflearn/section01/problem01/Main.java
-```
-
-입력 파일 사용:
-
-```bash
-./scripts/run.sh solutions/inflearn/section01/problem01/Main.java input.txt
-```
-
-프로그래머스 문제는 제출용 `Solution.java`와 로컬 테스트용 `Main.java`를 함께 둡니다.
-
-```bash
-./scripts/run.sh solutions/programmers/level1/problem12944/Main.java
-```
-
-`run.sh`는 선택한 파일과 같은 디렉터리의 Java 파일을 함께 컴파일합니다. 컴파일 결과는
-임시 디렉터리에 생성하므로 저장소에 `.class` 파일을 남기지 않습니다.
-
-## IntelliJ 설정
-
-1. `solutions` 디렉터리를 우클릭합니다.
-2. `Mark Directory as` → `Sources Root`를 선택합니다.
-3. 실행할 `Main.java`의 `main` 메서드에서 Run 또는 Debug를 선택합니다.
-
-문제마다 패키지가 다르므로 Sources Root를 다시 변경할 필요가 없습니다.
 
 ## 커밋 규칙
 
