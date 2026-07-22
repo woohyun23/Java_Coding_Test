@@ -4,16 +4,17 @@ import java.util.*;
 
 class Solution {
     public String solution(String s, int n) {
-        String answer = "";
+        StringBuilder answer = new StringBuilder();
         for (char x : s.toCharArray()) {
             if (x == ' ') {
-                answer += " ";
-                continue;
+                answer.append(" ");
+            } else if (x >= 'a' && x <= 'z') {
+                answer.append((char) ((x - 'a' + n) % 26 + 'a'));
+            } else {
+                answer.append((char)( (x - 'A' + n) % 26 + 'A'));
             }
-            int ascii = (int)x + n;
-            if (ascii > 122) ascii -= 26;
         }
 
-        return answer;
+        return answer.toString();
     }
 }
