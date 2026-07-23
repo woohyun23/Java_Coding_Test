@@ -1,0 +1,19 @@
+package programmers.level3.problem68644;
+
+import java.util.*;
+
+class Solution {
+    public int[] solution(int[] numbers) {
+        Set<Integer> answer = new TreeSet<>();
+        for (int i = 0; i < numbers.length; i++) {
+            for (int j = i + 1; j < numbers.length; j++) {
+                if (answer.contains(numbers[i] + numbers[j])) continue;
+                else answer.add(numbers[i] + numbers[j]);
+            }
+        }
+
+        return answer.stream()
+                .mapToInt(Integer::intValue)
+                .toArray();
+    }
+}
