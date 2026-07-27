@@ -9,6 +9,13 @@ class Solution {
         // n : 상빈이가 가지고 있는 빈 병의 수
         int answer = 0;
 
+        while (n >= a) {
+            int temp = b * (n / a);
+            answer += temp;
+            n = n % a + temp;
+
+        }
+
         return answer;
     }
 }
