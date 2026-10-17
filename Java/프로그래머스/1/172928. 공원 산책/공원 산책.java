@@ -25,7 +25,7 @@ class Solution {
           boolean check = true;
 
           if (direction.equals("E")) {
-            // 최종 위치가 오른쪽 경계를 벗어나는지 확인
+            // 최종 위치가 공원 경계를 벗어나는지 확인
             if (start[1] + size >= park[0].length()) check = false;
 
             for (int num = 1; check && num <= size; num++) {
@@ -38,7 +38,7 @@ class Solution {
             if (check) start[1] += size;
           } 
           else if (direction.equals("W")) {
-            // 최종 위치가 오른쪽 경계를 벗어나는지 확인
+            // 최종 위치가 공원 경계를 벗어나는지 확인
             if (start[1] - size < 0) check = false;
 
             for (int num = 1; check && num <= size; num++) {
@@ -51,7 +51,7 @@ class Solution {
             if (check) start[1] -= size;
           } 
           else if (direction.equals("S")) {
-            // 최종 위치가 오른쪽 경계를 벗어나는지 확인
+            // 최종 위치가 공원 경계를 벗어나는지 확인
             if (start[0] + size >= park.length) check = false;
 
             for (int num = 1; check && num <= size; num++) {
@@ -64,7 +64,7 @@ class Solution {
             if (check) start[0] += size;
           } 
           else if (direction.equals("N")) {
-            // 최종 위치가 오른쪽 경계를 벗어나는지 확인
+            // 최종 위치가 공원 경계를 벗어나는지 확인
             if (start[0] - size < 0) check = false;
 
             for (int num = 1; check && num <= size; num++) {
