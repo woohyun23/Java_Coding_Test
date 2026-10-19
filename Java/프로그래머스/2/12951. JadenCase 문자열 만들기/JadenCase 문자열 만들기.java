@@ -2,6 +2,7 @@ import java.util.*;
 
 class Solution {
     public String solution(String s) {
+        // -1을 지정해 문자열 끝의 공백도 보존
         String[] words = s.split(" ", -1);
 
         for (int i = 0; i < words.length; i++) {
